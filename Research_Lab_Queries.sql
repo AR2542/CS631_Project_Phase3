@@ -53,29 +53,30 @@ create table External_Collaborator (
 create table Mentorship(
     Mentor_ID int not null,
     Mentee_ID int not null,
-    Start_Date Date not null,
-    End_Date Date not null,
-    Foreign Key (Mentor_ID) references Lab_Member(Member_ID),
-    Unique (Mentor_ID, Mentee_ID)
+    Start_Date date not null,
+    End_Date date not null,
+    primary key (Mentor_ID, Mentee_ID),
+    foreign key (Mentor_ID) references Lab_Member(Member_ID),
+    foreign key (Mentee_ID) references Lab_Member(Member_ID)
+);
+
+create table Equipment (
+    ID int primary key,
+    Name varchar(31) not null,
+    Type varchar(31) not null,
+    Purchase_Date date not null,
+    Status varchar(15) not null
 );
 
 create table Equipment_Usage (
-    Equipment_ID int Primary Key,
+    Equipment_ID int not null,
     Member_ID int not null,
-    Purpose_of_Use Varchar(255) not null,
-    Start_Date Date not null,
-    End_Date Date not null,
-    Foreign Key (Member_ID) references Lab_Member(Member_ID),
-    Unique (Equipment_ID, Member_ID)
-);
-
-create table Equipment(
-    ID int Primary Key,
-    Name Varchar(31) not null,
-    Type Varchar(31) not null,
-    Purchase_Date Date not null,
-    Status Varchar(15) not null,
-    Foreign Key (ID) references Equipment_Usage(Equipment_ID)
+    Purpose_of_Use varchar(255) not null,
+    Start_Date date not null,
+    End_Date date not null,
+    primary key (Equipment_ID, Member_ID),
+    foreign key (Equipment_ID) references Equipment(ID),
+    foreign key (Member_ID) references Lab_Member(Member_ID)
 );
 
 create table Project(
@@ -93,9 +94,10 @@ create table Lab_Working(
     Member_ID int not null,
     Project_ID int not null,
     Weekly_Hours int not null,
-    Project_Role Varchar(31) not null,
-    Foreign Key (Project_ID) references Project(Project_ID),
-    Unique (Member_ID, Project_ID)
+    Role varchar(31) not null,
+    primary key (Member_ID, Project_ID),
+    foreign key (Member_ID) references Lab_Member(Member_ID),
+    foreign key (Project_ID) references Project(Project_ID)
 );
 
 create table Project_Grant(
@@ -110,31 +112,31 @@ create table Project_Grant(
 create table Funding(
     Project_ID int not null,
     Grant_ID int not null,
-    Foreign Key (Project_ID) references Project(Project_ID),
-    Foreign Key (Grant_ID) references Project_Grant(ID),
-    Unique (Project_ID, Grant_ID)
+    primary key (Project_ID, Grant_ID),
+    foreign key (Project_ID) references Project(Project_ID),
+    foreign key (Grant_ID) references Grant(ID)
 );
 
-create table Publication(
-    ID int Primary Key,
-    Title Varchar(63) not null,
-    Month_Date Date not null,
-    Year_Date Date not null,
-    Venue Varchar(63) not null,
-    DOI Date not null
+create table Publication (
+    ID int primary key,
+    Title varchar(63) not null,
+    Month_Date int not null,
+    Year_Date int not null,
+    Venue varchar(63) not null,
+    DOI varchar(63) not null
 );
 
 create table Authorship(
     Member_ID int not null,
     Publication_ID int not null,
-    Foreign Key (Member_ID) references Lab_Member(Member_ID),
-    Foreign Key (Publication_ID) references Publication(ID),
-    Unique (Member_ID, Publication_ID)
+    primary key (Member_ID, Publication_ID),
+    foreign key (Member_ID) references Lab_Member(Member_ID),
+    foreign key (Publication_ID) references Publication(ID)
 );
 
 insert into Lab_Member(Member_ID, Member_Name, Member_Type, Join_Date) values 
     (100, 'Abhinav Ramesh', 'Student', '2019-09-30'),
     (101, 'Dimitre Theodoratos', 'Faculty', '2003-05-17'),
     (102, 'Bill Mccann', 'External Collaborator', '1998-10-12');
-    
+
 select * from Lab_Member;
