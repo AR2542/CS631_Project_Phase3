@@ -7,7 +7,7 @@ def execute_query(query, id):
         conn = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="#Subho1062*",
+            password="--",
             database="research_lab"
         )
 
